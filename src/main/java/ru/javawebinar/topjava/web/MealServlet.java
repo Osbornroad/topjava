@@ -16,7 +16,9 @@ public class MealServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         LOG.debug("redirect to meals");
-        response.sendRedirect("meals.jsp");
+        //response.sendRedirect("meals.jsp");
+        request.setAttribute("name", "Nata");
+        request.getRequestDispatcher("meals.jsp").forward(request, response);
     }
 }
 
