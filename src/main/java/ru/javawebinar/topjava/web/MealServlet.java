@@ -14,9 +14,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -30,22 +28,75 @@ public class MealServlet extends HttpServlet {
     {
         LOG.debug("redirect to meals");
 
+        if ("filling".equalsIgnoreCase(request.getParameter("action"))) {
+            fillingTable();
+        }
+        if ("delete".equalsIgnoreCase(request.getParameter("action"))) {
+            delete(Integer.parseInt(request.getParameter("mealId")));
+        }
+        if ("update".equalsIgnoreCase(request.getParameter("action")))
+            update(Integer.parseInt(request.getParameter("mealId")), request, response);
+
+        mealsWithExceeded = MealsUtil.getFilteredWithExceeded(meals, LocalTime.MIN, LocalTime.MAX, 2000);
+        Collections.sort(mealsWithExceeded, new Comparator<MealWithExceed>() {
+            @Override
+            public int compare(MealWithExceed o1, MealWithExceed o2) {
+                return o1.getId() - o2.getId();
+            }
+        });
+        request.setAttribute("mealsWithExceeded", mealsWithExceeded);
+        request.getRequestDispatcher("meals.jsp").forward(request, response);
+    }
+
+    private void update(int id, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
+        Iterator<Meal> iterator = meals.iterator();
+        Meal meal = null;
+        while(iterator.hasNext())
+        {
+            meal = iterator.next();
+            if (meal.getId() == id)
+                break;
+        }
+        request.setAttribute("newMeal", meal);
+    }
+
+    private void fillingTable()
+    {
         meals.add(new Meal(1, LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500));
         meals.add(new Meal(2, LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 1000));
         meals.add(new Meal(3, LocalDateTime.of(2015, Month.MAY, 30, 20, 0), "Ужин", 500));
         meals.add(new Meal(4, LocalDateTime.of(2015, Month.MAY, 31, 10, 0), "Завтрак", 1000));
         meals.add(new Meal(5, LocalDateTime.of(2015, Month.MAY, 31, 13, 0), "Обед", 500));
         meals.add(new Meal(6, LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510));
-
-        mealsWithExceeded = MealsUtil.getFilteredWithExceeded(meals, LocalTime.MIN, LocalTime.MAX, 2000);
-        request.setAttribute("mealsWithExceeded", mealsWithExceeded);
-        request.getRequestDispatcher("meals.jsp").forward(request, response);
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    private void delete(int id)
     {
-        LOG.debug("meal added");
+        Iterator<Meal> iterator = meals.iterator();
+        while(iterator.hasNext())
+        {
+            Meal meal = iterator.next();
+            if (meal.getId() == id)
+                iterator.remove();
+        }
+    }
 
+    private boolean isExists(int id)
+    {
+        Iterator<Meal> iterator = meals.iterator();
+        Meal meal = null;
+        while(iterator.hasNext())
+        {
+            meal = iterator.next();
+            if (meal.getId() == id)
+                return true;
+        }
+        return false;
+    }
+
+    private void addMeal(HttpServletRequest request)
+    {
         int id = 0;
         LocalDateTime localDateTime = null;
         try {
@@ -61,10 +112,25 @@ public class MealServlet extends HttpServlet {
         }
         catch (NumberFormatException e){}
 
-        meals.add(new Meal(id, localDateTime, description, calories));
+        if (isExists(id))
+            delete(id);
 
+        meals.add(new Meal(id, localDateTime, description, calories));
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
+        LOG.debug("meal added");
+
+        addMeal(request);
 
         mealsWithExceeded = MealsUtil.getFilteredWithExceeded(meals, LocalTime.MIN, LocalTime.MAX, 2000);
+        Collections.sort(mealsWithExceeded, new Comparator<MealWithExceed>() {
+            @Override
+            public int compare(MealWithExceed o1, MealWithExceed o2) {
+                return o1.getId() - o2.getId();
+            }
+        });
         request.setAttribute("mealsWithExceeded", mealsWithExceeded);
         request.getRequestDispatcher("meals.jsp").forward(request, response);
     }
