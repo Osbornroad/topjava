@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
  * 11.01.2015.
  */
 public class MealWithExceed {
+    private volatile int id;
+
     private final LocalDateTime dateTime;
 
     private final String description;
@@ -17,11 +19,12 @@ public class MealWithExceed {
 
     private final boolean exceed;
 
-    public MealWithExceed(LocalDateTime dateTime, String description, int calories, boolean exceed) {
+    public MealWithExceed(LocalDateTime dateTime, String description, int calories, boolean exceed, int id) {
         this.dateTime = dateTime;
         this.description = description;
         this.calories = calories;
         this.exceed = exceed;
+        this.id = id;
     }
 
     @Override
@@ -52,5 +55,9 @@ public class MealWithExceed {
 
     public String getDateTimeWithoutT() {
         return TimeUtil.formatLocalDateTime(getDateTime(), "yyyy-MM-dd HH:mm");
+    }
+
+    public int getId() {
+        return id;
     }
 }
