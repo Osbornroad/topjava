@@ -30,22 +30,31 @@ public class MealServlet extends HttpServlet {
 
         if ("filling".equalsIgnoreCase(request.getParameter("action"))) {
             fillingTable();
+            System.out.println("Filling");
+            response.sendRedirect("meals");
         }
-        if ("delete".equalsIgnoreCase(request.getParameter("action"))) {
+        else if ("delete".equalsIgnoreCase(request.getParameter("action"))) {
             delete(Integer.parseInt(request.getParameter("mealId")));
+            response.sendRedirect("meals");
         }
-        if ("update".equalsIgnoreCase(request.getParameter("action")))
+        else if ("update".equalsIgnoreCase(request.getParameter("action"))) {
             update(Integer.parseInt(request.getParameter("mealId")), request, response);
+            request.setAttribute("mealsWithExceeded", mealsWithExceeded);
+            request.getRequestDispatcher("meals.jsp").forward(request, response);
 
-        mealsWithExceeded = MealsUtil.getFilteredWithExceeded(meals, LocalTime.MIN, LocalTime.MAX, 2000);
-        Collections.sort(mealsWithExceeded, new Comparator<MealWithExceed>() {
-            @Override
-            public int compare(MealWithExceed o1, MealWithExceed o2) {
-                return o1.getId() - o2.getId();
-            }
-        });
-        request.setAttribute("mealsWithExceeded", mealsWithExceeded);
-        request.getRequestDispatcher("meals.jsp").forward(request, response);
+        }
+
+        else {
+            mealsWithExceeded = MealsUtil.getFilteredWithExceeded(meals, LocalTime.MIN, LocalTime.MAX, 2000);
+            Collections.sort(mealsWithExceeded, new Comparator<MealWithExceed>() {
+                @Override
+                public int compare(MealWithExceed o1, MealWithExceed o2) {
+                    return o1.getId() - o2.getId();
+                }
+            });
+            request.setAttribute("mealsWithExceeded", mealsWithExceeded);
+            request.getRequestDispatcher("meals.jsp").forward(request, response);
+        }
     }
 
     private void update(int id, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException

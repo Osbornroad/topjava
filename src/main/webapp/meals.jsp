@@ -12,7 +12,7 @@
         #tr{
             border-bottom:1px solid black;
             border-top:1px solid black;
-            height: 25px;
+
         }
         #td{
             text-align: center;
@@ -28,16 +28,16 @@
 <br/>
 <table id = table>
     <tr id = tr bgcolor="#00bfff">
-        <th height="35" width="60">Номер</th>
+        <th height="40" width="60">Номер</th>
         <th width="100">Описание</th>
         <th width="100">Калории</th>
         <th width="160">Дата, время</th>
-        <th width="90">Удалить</th>
-        <th width="90">Изменить</th>
+        <th width="120">Удалить</th>
+        <th width="120">Изменить</th>
     </tr>
     <c:forEach items="${mealsWithExceeded}" var="meals">
         <tr id = tr bgcolor="${meals.isExceed() ? "#ffb6c1" : "#00ff7f"}" align="center">
-            <td height="25">${meals.getId()}</td>
+            <td height="30">${meals.getId()}</td>
             <td>${meals.getDescription()}</td>
             <td>${meals.getCalories()}</td>
             <td>${meals.getDateTimeWithoutT()}</td>
