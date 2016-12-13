@@ -122,6 +122,8 @@ public class MealServlet extends HttpServlet {
     {
         LOG.debug("meal added");
 
+        request.setCharacterEncoding("UTF-8");
+
         addMeal(request);
 
         mealsWithExceeded = MealsUtil.getFilteredWithExceeded(meals, LocalTime.MIN, LocalTime.MAX, 2000);
