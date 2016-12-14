@@ -23,8 +23,14 @@
 <h2><a href="index.html">Home</a></h2>
 <h2>Список еды</h2>
 
-<a href="meals?action=filling">Загрузить тестовые данные</a>
-<br/>
+<table width="660">
+    <tr>
+        <td align="right">
+            <a href="meals?action=filling">Загрузить тестовые данные</a>
+        </td>
+    </tr>
+</table>
+
 <br/>
 <table id = table>
     <tr id = tr bgcolor="#00bfff">
@@ -46,34 +52,13 @@
         </tr>
     </c:forEach>
 </table>
-<br>
-
-<h3>Добавить</h3>
-
-<form method="post" >
-    <table width="100%" cellspacing="0" cellpadding="4">
-        <tr>
-            <td align="right" width="100">ID</td>
-            <td><input type="text" name="id"></td>
-        </tr>
-        <tr>
-            <td align="right" width="100">Description</td>
-            <td><input type="text" name="description"></td>
-        </tr>
-        <tr>
-            <td align="right" width="100">Calories</td>
-            <td><input type="text" name="calories"></td>
-        </tr>
-        <tr>
-            <td align="right" width="100">DateTime</td>
-            <td><input type="datetime-local" name="datetime"></td>
-        </tr>
-        <tr>
-            <td align="right" width="100"></td>
-            <td><input type="submit"></td>
-        </tr>
-    </table>
+<br/>
+<br/>
+<form action="addMeal.jsp">
+    <input type="submit" value="Добавить" />
 </form>
+<!--
+<a href="addMeal.jsp">Добавить</a>
 
 <h3>Изменить</h3>
 
@@ -84,8 +69,7 @@
     DateTime : <input type="datetime-local" name="datetime">
     <input type="submit">
 </form>
-
-</table>
+-->
 </body>
 </html>
 

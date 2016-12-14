@@ -21,8 +21,13 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class MealServlet extends HttpServlet {
     private static final Logger LOG = getLogger(MealServlet.class);
 
-    List<Meal> meals = Collections.synchronizedList(new ArrayList<Meal>());
-    List<MealWithExceed> mealsWithExceeded;
+    private List<Meal> meals = Collections.synchronizedList(new ArrayList<Meal>());
+    private List<MealWithExceed> mealsWithExceeded;
+    private static volatile int id = 0;
+
+    private int getId() {
+        return ++id;
+    }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
@@ -38,9 +43,10 @@ public class MealServlet extends HttpServlet {
             response.sendRedirect("meals");
         }
         else if ("update".equalsIgnoreCase(request.getParameter("action"))) {
-            update(Integer.parseInt(request.getParameter("mealId")), request, response);
-            request.setAttribute("mealsWithExceeded", mealsWithExceeded);
-            request.getRequestDispatcher("meals.jsp").forward(request, response);
+            //update(Integer.parseInt(request.getParameter("mealId")), request, response);
+            //request.setAttribute("mealsWithExceeded", mealsWithExceeded);
+            request.setAttribute("mealId", request.getParameter("mealId"));
+            request.getRequestDispatcher("updateMeal.jsp").forward(request, response);
 
         }
 
@@ -56,7 +62,7 @@ public class MealServlet extends HttpServlet {
             request.getRequestDispatcher("meals.jsp").forward(request, response);
         }
     }
-
+/*
     private void update(int id, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         Iterator<Meal> iterator = meals.iterator();
@@ -70,14 +76,15 @@ public class MealServlet extends HttpServlet {
         request.setAttribute("newMeal", meal);
     }
 
+*/
     private void fillingTable()
     {
-        meals.add(new Meal(1, LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500));
-        meals.add(new Meal(2, LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 1000));
-        meals.add(new Meal(3, LocalDateTime.of(2015, Month.MAY, 30, 20, 0), "Ужин", 500));
-        meals.add(new Meal(4, LocalDateTime.of(2015, Month.MAY, 31, 10, 0), "Завтрак", 1000));
-        meals.add(new Meal(5, LocalDateTime.of(2015, Month.MAY, 31, 13, 0), "Обед", 500));
-        meals.add(new Meal(6, LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510));
+        meals.add(new Meal(getId(), LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500));
+        meals.add(new Meal(getId(), LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 1000));
+        meals.add(new Meal(getId(), LocalDateTime.of(2015, Month.MAY, 30, 20, 0), "Ужин", 500));
+        meals.add(new Meal(getId(), LocalDateTime.of(2015, Month.MAY, 31, 10, 0), "Завтрак", 1000));
+        meals.add(new Meal(getId(), LocalDateTime.of(2015, Month.MAY, 31, 13, 0), "Обед", 500));
+        meals.add(new Meal(getId(), LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510));
     }
 
     private void delete(int id)
@@ -123,6 +130,10 @@ public class MealServlet extends HttpServlet {
 
         if (isExists(id))
             delete(id);
+        else
+        {
+            id = getId();
+        }
 
         meals.add(new Meal(id, localDateTime, description, calories));
     }
@@ -136,12 +147,7 @@ public class MealServlet extends HttpServlet {
         addMeal(request);
 
         mealsWithExceeded = MealsUtil.getFilteredWithExceeded(meals, LocalTime.MIN, LocalTime.MAX, 2000);
-        Collections.sort(mealsWithExceeded, new Comparator<MealWithExceed>() {
-            @Override
-            public int compare(MealWithExceed o1, MealWithExceed o2) {
-                return o1.getId() - o2.getId();
-            }
-        });
+        Collections.sort(mealsWithExceeded, Comparator.comparingInt(MealWithExceed::getId));
         request.setAttribute("mealsWithExceeded", mealsWithExceeded);
         request.getRequestDispatcher("meals.jsp").forward(request, response);
     }
