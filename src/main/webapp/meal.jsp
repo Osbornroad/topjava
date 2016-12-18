@@ -32,8 +32,12 @@
     <form method="post" action="meals">
         <input type="hidden" name="id" value="${meal.id}">
         <dl>
+            <dt>UserId:</dt>
+            <dt><input readonly="readonly" type="number" value="${meal.userId}" name="userId"></dt>
+        </dl>
+        <dl>
             <dt>DateTime:</dt>
-            <dd><input type="datetime-local" value="${meal.dateTime}" name="dateTime"></dd>
+            <dd><input type="datetime-local" value="${meal.dateTime}" name="dateTime" autofocus></dd>
         </dl>
         <dl>
             <dt>Description:</dt>
