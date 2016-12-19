@@ -7,9 +7,9 @@ import org.springframework.stereotype.Controller;
 import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
-import ru.javawebinar.topjava.util.exception.NotFoundException;
-
-import java.util.Collection;
+import ru.javawebinar.topjava.to.MealWithExceed;
+import ru.javawebinar.topjava.util.MealsUtil;
+import java.util.List;
 
 /**
  * GKislin
@@ -19,28 +19,28 @@ import java.util.Collection;
 public class MealRestController {
     protected final Logger LOG = LoggerFactory.getLogger(getClass());
 
-    int userId = AuthorizedUser.id();
+    //int userId = AuthorizedUser.getId();
 
     @Autowired
     private MealService mealService;
 
     public Meal save(Meal meal){
         LOG.info("save meal of user №" + meal.getUserId());
-        return mealService.save(meal, userId);
+        return mealService.save(meal, AuthorizedUser.getId());
     }
 
     public boolean delete(int id){
-        LOG.info("delete meal №" + id + " of user №" + userId);
-        return mealService.delete(id, userId);
+        LOG.info("delete meal №" + id + " of user №" + AuthorizedUser.getId());
+        return mealService.delete(id, AuthorizedUser.getId());
     }
 
     public Meal get(int id){
-        LOG.info("get meal №" + id + " of user №" + userId);
-        return mealService.get(id, userId);
+        LOG.info("get meal №" + id + " of user №" + AuthorizedUser.getId());
+        return mealService.get(id, AuthorizedUser.getId());
     }
 
-    public Collection<Meal> getAll(){
-        LOG.info("getAll of user №" + userId);
-        return mealService.getAll(userId);
+    public List<MealWithExceed> getAll(){
+        LOG.info("getAll of user №" + AuthorizedUser.getId());
+        return MealsUtil.getWithExceeded(mealService.getAll(AuthorizedUser.getId()), AuthorizedUser.getCaloriesPerDay());
     }
 }

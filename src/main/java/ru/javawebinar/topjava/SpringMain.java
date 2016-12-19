@@ -11,13 +11,14 @@ import ru.javawebinar.topjava.web.user.AdminRestController;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Arrays;
-import java.util.Collection;
 
 /**
  * User: gkislin
  * Date: 22.08.2014
  */
 public class SpringMain {
+
+
 
     public static void main(String[] args) {
         // java 7 Automatic resource management
@@ -30,29 +31,12 @@ public class SpringMain {
 
 
             MealRestController mealRestController = appCtx.getBean(MealRestController.class);
-            //mealRestController.save(new Meal(1, LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500));
-            //mealRestController.save(new Meal(1, LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 1000));
-            //mealRestController.save(new Meal(1, LocalDateTime.of(2015, Month.MAY, 30, 20, 0), "Ужин", 500));
-            //mealRestController.save(new Meal(2, LocalDateTime.of(2015, Month.MAY, 31, 10, 0), "Завтрак", 1000));
-            //mealRestController.save(new Meal(2, LocalDateTime.of(2015, Month.MAY, 31, 13, 0), "Обед", 500));
-            //mealRestController.save(new Meal(2, LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510));
-
-            Collection<Meal> collection = mealRestController.getAll();
-            for (Meal meal : collection) {
-                System.out.println(meal.toString());
-            }
-            System.out.println("********************************************");
-/*
-            mealRestController.delete(1);
-
-            collection = mealRestController.getAll();
-            for (Meal meal : collection) {
-                System.out.println(meal.toString());
-            }
-            System.out.println("********************************************");
-
-            System.out.println(mealRestController.get(6).toString());
-            System.out.println("********************************************");
-   */     }
+            mealRestController.save(new Meal(1, LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500));
+            mealRestController.save(new Meal(1, LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 1000));
+            mealRestController.save(new Meal(1, LocalDateTime.of(2015, Month.MAY, 30, 20, 0), "Ужин", 500));
+            mealRestController.save(new Meal(2, LocalDateTime.of(2015, Month.MAY, 31, 10, 0), "Завтрак", 1000));
+            mealRestController.save(new Meal(2, LocalDateTime.of(2015, Month.MAY, 31, 13, 0), "Обед", 500));
+            mealRestController.save(new Meal(2, LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510));
+        }
     }
 }
