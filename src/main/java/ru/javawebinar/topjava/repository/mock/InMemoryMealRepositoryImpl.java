@@ -18,11 +18,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class InMemoryMealRepositoryImpl implements MealRepository {
     private Map<Integer, Meal> repository = new ConcurrentHashMap<>();
     private AtomicInteger counter = new AtomicInteger(0);
-
+/*
     {
         MealsUtil.MEALS.forEach(meal -> save(meal));
     }
-
+*/
     @Override
     public Meal save(Meal meal) {
         if (meal.isNew()) {
@@ -45,8 +45,8 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     @Override
     public Meal get(int id, int userId) {
         Meal meal = repository.get(id);
-        if (userId == meal.getUserId())
-            return repository.get(id);
+        if ((meal != null) && (userId == meal.getUserId()))
+            return meal;
         else
             return null;
     }
