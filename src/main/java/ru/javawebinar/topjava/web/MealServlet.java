@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.javawebinar.topjava.AuthorizedUser;
+import ru.javawebinar.topjava.model.DateTimeFilter;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.web.meal.MealRestController;
@@ -19,6 +20,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -30,10 +33,14 @@ public class MealServlet extends HttpServlet {
 
     private MealRestController controller;
     private ConfigurableApplicationContext appCtx;
+
+    private Map<Integer, DateTimeFilter> dateTimeFilterMap;
+    /*
     private LocalDate startDate;
     private LocalDate endDate;
     private LocalTime startTime;
     private LocalTime endTime;
+    */
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -41,11 +48,15 @@ public class MealServlet extends HttpServlet {
         appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml");
         controller = appCtx.getBean(MealRestController.class);
         AuthorizedUser.setId(1);
+
+        dateTimeFilterMap = new HashMap<>();
+
+        /*
         startDate = DateTimeUtil.minDate();
         endDate = DateTimeUtil.maxDate();
         startTime = DateTimeUtil.minTime();
         endTime = DateTimeUtil.maxTime();
-
+        */
         //   repository = new InMemoryMealRepositoryImpl();
     }
 
@@ -73,22 +84,40 @@ public class MealServlet extends HttpServlet {
         String startD = request.getParameter("startDate");
         String endD = request.getParameter("endDate");
 
+        if (!dateTimeFilterMap.containsKey(AuthorizedUser.getId()))
+            dateTimeFilterMap.put(AuthorizedUser.getId(), new DateTimeFilter());
+
         if ((startD != null) && (!"".equals(startD)))
-            startDate = LocalDate.parse(startD);
+            dateTimeFilterMap.get(AuthorizedUser.getId()).setStartDate(LocalDate.parse(startD));
         if ((endD != null) && (!"".equals(endD)))
-            endDate = LocalDate.parse(request.getParameter("endDate"));
+            dateTimeFilterMap.get(AuthorizedUser.getId()).setEndDate(LocalDate.parse(endD));
 
         String startT = request.getParameter("startTime");
         String endT = request.getParameter("endTime");
 
         if ((startT != null) && (!"".equals(startT)))
-            startTime = LocalTime.parse(startT);
+            dateTimeFilterMap.get(AuthorizedUser.getId()).setStartTime(LocalTime.parse(startT));
         if ((endT != null) && (!"".equals(endT)))
-            endTime = LocalTime.parse(request.getParameter("endTime"));
+            dateTimeFilterMap.get(AuthorizedUser.getId()).setEndTime(LocalTime.parse(endT));
+
+        if ("true".equals(request.getParameter("timeClear"))) {
+            dateTimeFilterMap.get(AuthorizedUser.getId()).setStartTime(DateTimeUtil.minTime());
+            dateTimeFilterMap.get(AuthorizedUser.getId()).setEndTime(DateTimeUtil.maxTime());
+        }
+
+        if ("true".equals(request.getParameter("dateClear"))){
+            dateTimeFilterMap.get(AuthorizedUser.getId()).setStartDate(DateTimeUtil.minDate());
+            dateTimeFilterMap.get(AuthorizedUser.getId()).setEndDate(DateTimeUtil.maxDate());
+        }
 
         if (action == null) {
             LOG.info("getAll");
-            request.setAttribute("meals", controller.getAll(startDate, endDate, startTime, endTime));
+            request.setAttribute("meals", controller.getAll(
+                    dateTimeFilterMap.get(AuthorizedUser.getId()).getStartDate(),
+                    dateTimeFilterMap.get(AuthorizedUser.getId()).getEndDate(),
+                    dateTimeFilterMap.get(AuthorizedUser.getId()).getStartTime(),
+                    dateTimeFilterMap.get(AuthorizedUser.getId()).getEndTime()
+                    ));
             request.getRequestDispatcher("/meals.jsp").forward(request, response);
             System.out.println("MealServlet: " + AuthorizedUser.getId());
 

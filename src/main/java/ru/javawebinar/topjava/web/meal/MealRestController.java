@@ -8,10 +8,12 @@ import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.to.MealWithExceed;
+import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -44,6 +46,13 @@ public class MealRestController {
 
     public List<MealWithExceed> getAll(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime){
         LOG.info("getAll of user №" + AuthorizedUser.getId());
-        return MealsUtil.getWithExceeded(mealService.getAll(AuthorizedUser.getId(), startDate, endDate, startTime, endTime), AuthorizedUser.getCaloriesPerDay());
+        List<MealWithExceed> mealWithExceeds = MealsUtil.getWithExceeded(mealService.getAll(AuthorizedUser.getId(), startDate, endDate), AuthorizedUser.getCaloriesPerDay());
+        List<MealWithExceed> filteredByTimeMealWithExceeds = new ArrayList<>();
+        for (MealWithExceed mealWithExceed : mealWithExceeds)
+        {
+            if (DateTimeUtil.isBetween(mealWithExceed.getDateTime().toLocalTime(), startTime, endTime))
+                filteredByTimeMealWithExceeds.add(mealWithExceed);
+        }
+        return filteredByTimeMealWithExceeds;
     }
 }

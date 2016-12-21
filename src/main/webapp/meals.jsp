@@ -37,6 +37,7 @@
                         </tr>
                     </table>
                     <button type="submit">Date filter</button>
+                    <button type="submit" name="dateClear" value="true">Date clear</button>
                 </form>
             </td>
             <td width="200">
@@ -52,7 +53,13 @@
                         </tr>
                     </table>
                     <button type="submit">Time filter</button>
+                    <button type="submit" name="timeClear" value="true">Time clear</button>
                 </form>
+            </td>
+        </tr>
+        <tr>
+            <td>
+
             </td>
         </tr>
     </table>

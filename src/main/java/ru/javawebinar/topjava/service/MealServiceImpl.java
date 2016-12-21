@@ -4,12 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
-import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -51,13 +48,7 @@ public class MealServiceImpl implements MealService {
     }
 
     @Override
-    public Collection<Meal> getAll(int userId, LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
-        Collection<Meal> collection = new ArrayList<>();
-        for (Meal meal : repository.getAll(userId, startDate, endDate))
-        {
-            if(DateTimeUtil.isBetween(meal.getTime(), startTime, endTime))
-                collection.add(meal);
-        }
-        return collection;
+    public Collection<Meal> getAll(int userId, LocalDate startDate, LocalDate endDate) {
+        return repository.getAll(userId, startDate, endDate);
     }
 }
