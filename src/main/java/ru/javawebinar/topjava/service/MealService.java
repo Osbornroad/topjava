@@ -5,6 +5,7 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Collection;
 
 /**
@@ -19,5 +20,5 @@ public interface MealService {
 
     Meal get(int id, int userId) throws NotFoundException;
 
-    Collection<Meal> getAll(int userId, LocalDate startDate, LocalDate endDate);
+    Collection<Meal> getAll(int userId, LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime);
 }

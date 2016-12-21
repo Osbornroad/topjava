@@ -6,6 +6,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.web.meal.MealRestController;
 
 import javax.servlet.ServletConfig;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
@@ -28,12 +30,21 @@ public class MealServlet extends HttpServlet {
 
     private MealRestController controller;
     private ConfigurableApplicationContext appCtx;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private LocalTime startTime;
+    private LocalTime endTime;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml");
         controller = appCtx.getBean(MealRestController.class);
+        AuthorizedUser.setId(1);
+        startDate = DateTimeUtil.minDate();
+        endDate = DateTimeUtil.maxDate();
+        startTime = DateTimeUtil.minTime();
+        endTime = DateTimeUtil.maxTime();
 
         //   repository = new InMemoryMealRepositoryImpl();
     }
@@ -59,9 +70,25 @@ public class MealServlet extends HttpServlet {
         String action = request.getParameter("action");
         String currentId = request.getParameter("id");
 
+        String startD = request.getParameter("startDate");
+        String endD = request.getParameter("endDate");
+
+        if ((startD != null) && (!"".equals(startD)))
+            startDate = LocalDate.parse(startD);
+        if ((endD != null) && (!"".equals(endD)))
+            endDate = LocalDate.parse(request.getParameter("endDate"));
+
+        String startT = request.getParameter("startTime");
+        String endT = request.getParameter("endTime");
+
+        if ((startT != null) && (!"".equals(startT)))
+            startTime = LocalTime.parse(startT);
+        if ((endT != null) && (!"".equals(endT)))
+            endTime = LocalTime.parse(request.getParameter("endTime"));
+
         if (action == null) {
             LOG.info("getAll");
-            request.setAttribute("meals", controller.getAll(/* Добавляем сюда фильтр */));
+            request.setAttribute("meals", controller.getAll(startDate, endDate, startTime, endTime));
             request.getRequestDispatcher("/meals.jsp").forward(request, response);
             System.out.println("MealServlet: " + AuthorizedUser.getId());
 

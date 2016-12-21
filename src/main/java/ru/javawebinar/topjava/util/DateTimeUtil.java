@@ -23,4 +23,16 @@ public class DateTimeUtil {
     public static String toString(LocalDateTime ldt) {
         return ldt == null ? "" : ldt.format(DATE_TIME_FORMATTER);
     }
+
+    public static LocalDate minDate(){
+        return LocalDate.MIN;
+    }
+
+    public static LocalDate maxDate(){
+        return LocalDate.MAX;
+    }
+
+    public static LocalTime minTime() {return LocalTime.MIN;}
+
+    public static LocalTime maxTime() {return LocalTime.MAX;}
 }

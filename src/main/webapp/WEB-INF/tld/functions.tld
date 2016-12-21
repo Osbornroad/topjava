@@ -13,4 +13,29 @@
         <function-class>ru.javawebinar.topjava.util.DateTimeUtil</function-class>
         <function-signature>java.lang.String toString(java.time.LocalDateTime)</function-signature>
     </function>
+
+    <function>
+        <name>minDate</name>
+        <function-class>ru.javawebinar.topjava.util.DateTimeUtil</function-class>
+        <function-signature>java.time.LocalDate minDate()</function-signature>
+    </function>
+
+    <function>
+        <name>maxDate</name>
+        <function-class>ru.javawebinar.topjava.util.DateTimeUtil</function-class>
+        <function-signature>java.time.LocalDate maxDate()</function-signature>
+    </function>
+
+    <function>
+        <name>minTime</name>
+        <function-class>ru.javawebinar.topjava.util.DateTimeUtil</function-class>
+        <function-signature>java.time.LocalTime minTime())</function-signature>
+    </function>
+
+    <function>
+        <name>maxTime</name>
+        <function-class>ru.javawebinar.topjava.util.DateTimeUtil</function-class>
+        <function-signature>java.time.LocalTime maxTime()</function-signature>
+    </function>
 </taglib>
+

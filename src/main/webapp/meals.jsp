@@ -21,6 +21,43 @@
     <h2>Meal list</h2>
     <a href="meals?action=create">Add Meal</a>
     <hr>
+
+    <table>
+        <tr>
+            <td width="200">
+                <form>
+                    <table>
+                        <tr>
+                            <td>Start date</td>
+                            <td>End date</td>
+                        </tr>
+                        <tr>
+                            <td><input type="date" name="startDate" value="${fn:minDate()}"></td>
+                            <td><input type="date" name="endDate" value="${fn:maxDate()}"></td>
+                        </tr>
+                    </table>
+                    <button type="submit">Date filter</button>
+                </form>
+            </td>
+            <td width="200">
+                <form>
+                    <table>
+                        <tr>
+                            <td>Start time</td>
+                            <td>End time</td>
+                        </tr>
+                        <tr>
+                            <td><input type="time" name="startTime"></td>
+                            <td><input type="time" name="endTime"></td>
+                        </tr>
+                    </table>
+                    <button type="submit">Time filter</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+
+    <hr>
     <table border="1" cellpadding="8" cellspacing="0">
         <thead>
         <tr>
@@ -49,5 +86,7 @@
         </c:forEach>
     </table>
 </section>
+
+
 </body>
 </html>

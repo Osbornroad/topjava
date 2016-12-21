@@ -20,6 +20,12 @@ public class UserServlet extends HttpServlet {
     private static final Logger LOG = getLogger(UserServlet.class);
 
     @Override
+    public void init() throws ServletException {
+        super.init();
+        AuthorizedUser.setId(1);
+    }
+
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         LOG.debug("forward to users");
         String authorizedUser = request.getParameter("authorizedUser");
