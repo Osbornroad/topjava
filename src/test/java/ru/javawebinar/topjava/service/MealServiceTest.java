@@ -8,6 +8,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.DbPopulator;
+import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -91,15 +92,22 @@ public class MealServiceTest {
         MATCHER.assertEquals(updated, service.get(100004, 100001));
     }
 
+    @Test (expected = NotFoundException.class)
+    public void testUpdateForeign() throws Exception {
+        Meal updated = new Meal(START_SEQ + 4, LocalDateTime.parse("2016-12-26 13:00", DATE_TIME_FORMATTER), "Coffee break", 999);
+        service.update(updated, 100000);
+        MATCHER.assertEquals(updated, service.get(100004, 100001));
+    }
+
     @Test
     public void testSave() throws Exception {
         Meal newMeal = new Meal(LocalDateTime.parse("2016-12-30 14:00", DATE_TIME_FORMATTER), "Second lunch", 888);
         service.save(newMeal, 100001);
         List<Meal> list = new ArrayList<>();
-        list.add(MEAL_3);
-        list.add(MEAL_4);
-        list.add(MEAL_5);
-        list.add(newMeal);
+            list.add(MEAL_3);
+            list.add(MEAL_4);
+            list.add(MEAL_5);
+            list.add(newMeal);
         Collections.sort(list, (o1, o2) -> o2.getDateTime().compareTo(o1.getDateTime()));
         MATCHER.assertCollectionEquals(list, service.getAll(100001));
     }
