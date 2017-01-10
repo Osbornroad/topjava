@@ -1,23 +1,39 @@
 package ru.javawebinar.topjava.model;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+import javax.persistence.*;
+
 /**
  * GKislin original
  * 11.01.2015.
  */
+
+@Entity
+@Table(name = "meals")
 public class Meal extends BaseEntity {
+
+    @Column(name = "datetime", nullable = false)
+    @NotEmpty
     private LocalDateTime dateTime;
 
+    @Column(name = "description", nullable = false)
+    @NotEmpty
     private String description;
 
+    @Column(name = "calories", nullable = false)
+    @NotEmpty
     private int calories;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    @NotEmpty
     private User user;
 
     public Meal() {
