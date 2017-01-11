@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.model;
 
-import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
@@ -9,31 +10,41 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 /**
  * GKislin original
  * 11.01.2015.
  */
 
+@NamedQueries({
+        @NamedQuery(name = Meal.ALL_SORTED, query = "SELECT m FROM Meal m " +
+                "WHERE m.user.id=:userId ORDER BY m.dateTime DESC"),
+        @NamedQuery(name = Meal.DELETE, query = "DELETE FROM Meal m WHERE m.id=:id"),
+})
+
 @Entity
 @Table(name = "meals")
 public class Meal extends BaseEntity {
 
-    @Column(name = "datetime", nullable = false)
-    @NotEmpty
+    public static final String ALL_SORTED = "Meal.getAllSorted";
+    public static final String DELETE = "Meal.delete";
+
+    @Column(name = "date_time", nullable = false)
+    @NotNull
     private LocalDateTime dateTime;
 
     @Column(name = "description", nullable = false)
-    @NotEmpty
+    @NotNull
     private String description;
 
     @Column(name = "calories", nullable = false)
-    @NotEmpty
+    @NotNull
     private int calories;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    @NotEmpty
+    @NotNull
     private User user;
 
     public Meal() {

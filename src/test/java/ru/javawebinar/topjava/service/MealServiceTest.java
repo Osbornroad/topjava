@@ -29,16 +29,19 @@ public class MealServiceTest {
     @Autowired
     private MealService service;
 
+    //Ok
     @Test
     public void testDelete() throws Exception {
         service.delete(MEAL1_ID, USER_ID);
         MATCHER.assertCollectionEquals(Arrays.asList(MEAL6, MEAL5, MEAL4, MEAL3, MEAL2), service.getAll(USER_ID));
     }
 
+    //Ok
     @Test(expected = NotFoundException.class)
     public void testDeleteNotFound() throws Exception {
         service.delete(MEAL1_ID, 1);
     }
+
 
     @Test
     public void testSave() throws Exception {
@@ -47,16 +50,19 @@ public class MealServiceTest {
         MATCHER.assertCollectionEquals(Arrays.asList(created, MEAL6, MEAL5, MEAL4, MEAL3, MEAL2, MEAL1), service.getAll(USER_ID));
     }
 
+    //Ok
     @Test
     public void testGet() throws Exception {
         Meal actual = service.get(ADMIN_MEAL_ID, ADMIN_ID);
         MATCHER.assertEquals(ADMIN_MEAL1, actual);
     }
 
+    //Ok
     @Test(expected = NotFoundException.class)
     public void testGetNotFound() throws Exception {
         service.get(MEAL1_ID, ADMIN_ID);
     }
+
 
     @Test
     public void testUpdate() throws Exception {
@@ -70,6 +76,7 @@ public class MealServiceTest {
         service.update(MEAL1, ADMIN_ID);
     }
 
+    //Ok
     @Test
     public void testGetAll() throws Exception {
         MATCHER.assertCollectionEquals(MEALS, service.getAll(USER_ID));
