@@ -17,11 +17,21 @@ import javax.validation.constraints.NotNull;
  * 11.01.2015.
  */
 
-@NamedQueries({
+@NamedQueries(value = {
         @NamedQuery(name = Meal.ALL_SORTED, query = "SELECT m FROM Meal m " +
                 "WHERE m.user.id=:userId ORDER BY m.dateTime DESC"),
         @NamedQuery(name = Meal.DELETE, query = "DELETE FROM Meal m WHERE m.id=:id"),
+        @NamedQuery(name = Meal.BETWEEN, query = "SELECT m FROM Meal m WHERE m.user.id=:userId AND m.dateTime BETWEEN :start AND :finish ORDER BY m.dateTime DESC")
 })
+
+/*
+    @Override
+    public List<Meal> getBetween(LocalDateTime startDate, LocalDateTime endDate, int userId) {
+        return jdbcTemplate.query(
+                "SELECT * FROM meals WHERE user_id=?  AND date_time BETWEEN  ? AND ? ORDER BY date_time DESC",
+                ROW_MAPPER, userId, startDate, endDate);
+    }
+ */
 
 @Entity
 @Table(name = "meals")
@@ -29,6 +39,7 @@ public class Meal extends BaseEntity {
 
     public static final String ALL_SORTED = "Meal.getAllSorted";
     public static final String DELETE = "Meal.delete";
+    public static final String BETWEEN = "Meal.between";
 
     @Column(name = "date_time", nullable = false)
     @NotNull

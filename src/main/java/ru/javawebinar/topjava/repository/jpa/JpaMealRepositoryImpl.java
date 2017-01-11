@@ -24,7 +24,7 @@ public class JpaMealRepositoryImpl implements MealRepository {
     @PersistenceContext
     private EntityManager em;
 
-
+    //Ok
     @Override
     @Transactional
     public Meal save(Meal meal, int userId) {
@@ -74,6 +74,16 @@ public class JpaMealRepositoryImpl implements MealRepository {
 
     @Override
     public List<Meal> getBetween(LocalDateTime startDate, LocalDateTime endDate, int userId) {
-        return null;
+        return em.createNamedQuery(Meal.BETWEEN).setParameter("userId", userId).setParameter("start", startDate).setParameter("finish", endDate).getResultList();
+
     }
+
+/*
+    @Override
+    public List<Meal> getBetween(LocalDateTime startDate, LocalDateTime endDate, int userId) {
+        return jdbcTemplate.query(
+                "SELECT * FROM meals WHERE user_id=?  AND date_time BETWEEN  ? AND ? ORDER BY date_time DESC",
+                ROW_MAPPER, userId, startDate, endDate);
+    }
+ */
 }

@@ -42,7 +42,7 @@ public class MealServiceTest {
         service.delete(MEAL1_ID, 1);
     }
 
-
+    //Ok
     @Test
     public void testSave() throws Exception {
         Meal created = getCreated();
@@ -63,7 +63,7 @@ public class MealServiceTest {
         service.get(MEAL1_ID, ADMIN_ID);
     }
 
-
+    //Ok
     @Test
     public void testUpdate() throws Exception {
         Meal updated = getUpdated();
@@ -71,9 +71,11 @@ public class MealServiceTest {
         MATCHER.assertEquals(updated, service.get(MEAL1_ID, USER_ID));
     }
 
+    //Ok
     @Test(expected = NotFoundException.class)
     public void testUpdateNotFound() throws Exception {
-        service.update(MEAL1, ADMIN_ID);
+        Meal testMeal = service.get(ADMIN_MEAL_ID, ADMIN_ID);
+        service.update(testMeal, USER_ID);
     }
 
     //Ok
