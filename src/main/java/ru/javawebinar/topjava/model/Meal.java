@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 /**
- * GKislin original
+ * GKislin
  * 11.01.2015.
  */
 public class Meal extends BaseEntity {
