@@ -1,11 +1,13 @@
 package ru.javawebinar.topjava.repository.datajpa;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,13 +16,27 @@ import java.util.List;
  */
 @Repository
 public class DataJpaMealRepositoryImpl implements MealRepository {
+    private static final Sort SORT_DATE = new Sort(Sort.Direction.DESC,"dateTime");
 
     @Autowired
     private CrudMealRepository crudRepository;
 
     @Override
-    public Meal save(Meal Meal, int userId) {
-        return null;
+    public Meal save(Meal meal, int userId) {
+
+        if (!meal.isNew() && get(meal.getId(), userId) == null) {
+            return null;
+        }
+        /*
+           meal.setUser(em.getReference(User.class, userId));
+        if (meal.isNew()) {
+            em.persist(meal);
+            return meal;
+        } else {
+            return em.merge(meal);
+        }
+        */
+        return crudRepository.save(meal);
     }
 
     @Override
@@ -30,16 +46,17 @@ public class DataJpaMealRepositoryImpl implements MealRepository {
 
     @Override
     public Meal get(int id, int userId) {
-        return null;
+        Meal meal = crudRepository.findOne(id);
+        return meal != null && meal.getUser().getId() == userId ? meal : null;
     }
 
     @Override
     public List<Meal> getAll(int userId) {
-        return null;
+        return crudRepository.findAll(userId);
     }
 
     @Override
     public List<Meal> getBetween(LocalDateTime startDate, LocalDateTime endDate, int userId) {
-        return null;
+        return crudRepository.findAll(startDate, endDate, userId);
     }
 }
