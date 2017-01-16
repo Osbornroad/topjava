@@ -27,7 +27,7 @@ import java.util.List;
 
 @Repository
 
-public abstract class JdbcMealRepositoryImpl implements MealRepository {
+public abstract class JdbcMealRepositoryImpl<T> implements MealRepository {
 
     private static final RowMapper<Meal> ROW_MAPPER = BeanPropertyRowMapper.newInstance(Meal.class);
 
@@ -39,6 +39,8 @@ public abstract class JdbcMealRepositoryImpl implements MealRepository {
 
     protected SimpleJdbcInsert insertMeal;
 
+    protected T t;
+
     @Autowired
     public JdbcMealRepositoryImpl(DataSource dataSource) {
         this.insertMeal = new SimpleJdbcInsert(dataSource)
@@ -46,13 +48,14 @@ public abstract class JdbcMealRepositoryImpl implements MealRepository {
                 .usingGeneratedKeyColumns("id");
     }
 
-/*    @Override
+    @Override
     public Meal save(Meal meal, int userId) {
+
         MapSqlParameterSource map = new MapSqlParameterSource()
                 .addValue("id", meal.getId())
                 .addValue("description", meal.getDescription())
                 .addValue("calories", meal.getCalories())
-                .addValue("date_time", meal.getDateTime())
+                .addValue("date_time", t)
                 .addValue("user_id", userId);
 
         if (meal.isNew()) {
@@ -68,7 +71,7 @@ public abstract class JdbcMealRepositoryImpl implements MealRepository {
             }
         }
         return meal;
-    }*/
+    }
 
     @Override
     public boolean delete(int id, int userId) {

@@ -24,27 +24,8 @@ public class JdbcMealHsqldbRepositoryImpl extends JdbcMealRepositoryImpl {
     @Override
     public Meal save(Meal meal, int userId) {
 
-        Timestamp t = Timestamp.valueOf(meal.getDateTime());
+        super.t = Timestamp.valueOf(meal.getDateTime());
 
-        MapSqlParameterSource map = new MapSqlParameterSource()
-                .addValue("id", meal.getId())
-                .addValue("description", meal.getDescription())
-                .addValue("calories", meal.getCalories())
-                .addValue("date_time", t)
-                .addValue("user_id", userId);
-
-        if (meal.isNew()) {
-            Number newId = insertMeal.executeAndReturnKey(map);
-            meal.setId(newId.intValue());
-        } else {
-            if (namedParameterJdbcTemplate.update("" +
-                            "UPDATE meals " +
-                            "   SET description=:description, calories=:calories, date_time=:date_time " +
-                            " WHERE id=:id AND user_id=:user_id"
-                    , map) == 0) {
-                return null;
-            }
-        }
-        return meal;
+        return super.save(meal, userId);
     }
 }
