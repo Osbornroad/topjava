@@ -41,6 +41,10 @@ public abstract class JdbcMealRepositoryImpl<T> implements MealRepository {
 
     protected T t;
 
+    protected T tStart;
+
+    protected T tEnd;
+
     @Autowired
     public JdbcMealRepositoryImpl(DataSource dataSource) {
         this.insertMeal = new SimpleJdbcInsert(dataSource)
@@ -95,6 +99,6 @@ public abstract class JdbcMealRepositoryImpl<T> implements MealRepository {
     public List<Meal> getBetween(LocalDateTime startDate, LocalDateTime endDate, int userId) {
         return jdbcTemplate.query(
                 "SELECT * FROM meals WHERE user_id=?  AND date_time BETWEEN  ? AND ? ORDER BY date_time DESC",
-                ROW_MAPPER, userId, startDate, endDate);
+                ROW_MAPPER, userId, tStart, tEnd);
     }
 }

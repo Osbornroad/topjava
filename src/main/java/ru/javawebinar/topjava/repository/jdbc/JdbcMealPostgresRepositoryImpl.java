@@ -12,6 +12,8 @@ import ru.javawebinar.topjava.model.Meal;
 
 import javax.sql.DataSource;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Created by User on 16.01.2017.
@@ -30,5 +32,13 @@ public class JdbcMealPostgresRepositoryImpl extends JdbcMealRepositoryImpl {
         super.t = meal.getDateTime();
 
         return super.save(meal, userId);
+    }
+
+    @Override
+    public List<Meal> getBetween(LocalDateTime startDate, LocalDateTime endDate, int userId) {
+        super.tStart = startDate;
+        super.tEnd = endDate;
+
+        return super.getBetween(startDate, endDate, userId);
     }
 }
