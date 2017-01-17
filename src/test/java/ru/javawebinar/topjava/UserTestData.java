@@ -1,10 +1,11 @@
 package ru.javawebinar.topjava;
 
 import ru.javawebinar.topjava.matcher.ModelMatcher;
+import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 
-import java.util.Objects;
+import java.util.*;
 
 import static ru.javawebinar.topjava.model.BaseEntity.START_SEQ;
 
@@ -30,4 +31,10 @@ public class UserTestData {
 //                            && Objects.equals(expected.getRoles(), actual.getRoles())
                     )
     );
+
+    public static final Map<User, List<Meal>> userWithMealsMap = new HashMap<>();
+    static
+    {
+        userWithMealsMap.put(USER, MealTestData.MEALS);
+    }
 }

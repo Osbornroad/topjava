@@ -3,10 +3,12 @@ package ru.javawebinar.topjava.repository.datajpa;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * GKislin
@@ -19,6 +21,8 @@ public class DataJpaUserRepositoryImpl implements UserRepository {
 
     @Autowired
     private CrudUserRepository crudRepository;
+
+    @Autowired CrudMealRepository crudMealRepository;
 
     @Override
     public User save(User user) {
@@ -43,5 +47,12 @@ public class DataJpaUserRepositoryImpl implements UserRepository {
     @Override
     public List<User> getAll() {
         return crudRepository.findAll(SORT_NAME_EMAIL);
+    }
+
+    @Transactional
+    public Map<User, List<Meal>> getUserWithMeals(int userId) {
+        User user = get(userId);
+        List<Meal> meals = crudMealRepository.findAll(userId);
+        return Collections.singletonMap(user, meals);
     }
 }
