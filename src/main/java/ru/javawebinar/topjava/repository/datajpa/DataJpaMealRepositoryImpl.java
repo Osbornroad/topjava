@@ -4,11 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.MealRepository;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * GKislin
@@ -52,5 +55,12 @@ public class DataJpaMealRepositoryImpl implements MealRepository {
     @Override
     public List<Meal> getBetween(LocalDateTime startDate, LocalDateTime endDate, int userId) {
         return crudRepository.findAll(startDate, endDate, userId);
+    }
+
+    @Override
+    public Map<Meal,User> getMealWithUser(int id) {
+        Meal meal = crudRepository.findOne(id);
+        User user = meal.getUser();
+        return Collections.singletonMap(meal, user);
     }
 }
