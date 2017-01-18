@@ -33,5 +33,5 @@ public interface UserService {
      * 7.1 достать по id пользователя вместе с его едой
      */
     // null if not found
-    Map<User, List<Meal>> getUserWithMeals(int userId);
+    User getUserWithMeals(int userId);
 }

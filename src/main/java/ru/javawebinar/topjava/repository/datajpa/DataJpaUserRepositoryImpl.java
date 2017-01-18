@@ -50,10 +50,14 @@ public class DataJpaUserRepositoryImpl implements UserRepository {
         return crudRepository.findAll(SORT_NAME_EMAIL);
     }
 
-    @Transactional (propagation = Propagation.REQUIRES_NEW)
+    public User getUserWithMeals(int userId) {
+        return crudRepository.getUserWithMeals(userId);
+    }
+
+/*    @Transactional (propagation = Propagation.REQUIRES_NEW)
     public Map<User, List<Meal>> getUserWithMeals(int userId) {
         User user = get(userId);
         List<Meal> meals = crudMealRepository.findAll(userId);
         return Collections.singletonMap(user, meals);
-    }
+    }*/
 }

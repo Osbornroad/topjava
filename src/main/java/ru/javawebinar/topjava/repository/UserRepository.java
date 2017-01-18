@@ -25,7 +25,7 @@ public interface UserRepository {
 
     List<User> getAll();
 
-    default Map<User, List<Meal>> getUserWithMeals(int userId) {
-        return null;
+    default User getUserWithMeals(int userId) {
+        throw new UnsupportedOperationException();
     }
 }

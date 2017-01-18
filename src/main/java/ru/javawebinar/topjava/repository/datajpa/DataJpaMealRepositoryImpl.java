@@ -59,10 +59,8 @@ public class DataJpaMealRepositoryImpl implements MealRepository {
     }
 
     @Override
-    public Map<Meal,User> getMealWithUser(int id) {
-        Meal meal = (Meal) crudRepository.getListMealsWithUser(id).toArray()[0];
-        User user = meal.getUser();
-        return Collections.singletonMap(meal, user);
+    public Meal getMealWithUser(int id) {
+        return crudRepository.getMealsWithUser(id);
     }
 
 }

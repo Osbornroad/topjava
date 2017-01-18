@@ -20,9 +20,8 @@ public class MealServicePostgresDataJpaTest extends MealServiceTest {
 
     @Test
     public void testMealWithUser() throws Exception {
-        Map<Meal, User> testMap = service.getMealWithUser(MealTestData.ADMIN_MEAL_ID);
-        Meal testMeal = (Meal) testMap.keySet().toArray()[0];
-        User testUser = (User) testMap.values().toArray()[0];
+        Meal testMeal = service.getMealWithUser(MealTestData.ADMIN_MEAL_ID);
+        User testUser = testMeal.getUser();
         ru.javawebinar.topjava.MealTestData.MATCHER.assertEquals(MealTestData.ADMIN_MEAL1, testMeal);
         ru.javawebinar.topjava.UserTestData.MATCHER.assertEquals(UserTestData.ADMIN, testUser);
     }

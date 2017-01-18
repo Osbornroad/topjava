@@ -74,8 +74,9 @@ public class UserServiceImpl implements UserService {
      */
     // null if not found
     @Override
-    public Map<User, List<Meal>> getUserWithMeals(int userId) {
+    public User getUserWithMeals(int userId) {
         Assert.notNull(userId, "userId must not be null");
+
         return repository.getUserWithMeals(userId);
     }
 }

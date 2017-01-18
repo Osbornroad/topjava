@@ -40,5 +40,5 @@ public interface CrudMealRepository extends JpaRepository<Meal, Integer> {
     Meal save(Meal meal);
 
     @Query("SELECT m FROM Meal m LEFT JOIN FETCH m.user WHERE m.id=:id")
-    List<Meal> getListMealsWithUser(@Param("id") int id);
+    Meal getMealsWithUser(@Param("id") int id);
 }

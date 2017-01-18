@@ -58,7 +58,7 @@ public class MealServiceImpl implements MealService {
     }
 
     @Override
-    public Map<Meal, User> getMealWithUser(int id) {
+    public Meal getMealWithUser(int id) {
         Assert.notNull(id, "Id must not be null");
         return repository.getMealWithUser(id);
     }

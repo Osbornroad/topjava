@@ -10,6 +10,8 @@ import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.service.UserServiceTest;
 
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -22,9 +24,9 @@ public class UserServicePostgresDataJpaTest extends UserServiceTest {
 
     @Test
     public void testUserWithMeals() throws Exception {
-        Map<User, List<Meal>> testMap = service.getUserWithMeals(UserTestData.USER_ID);
-        User testUser = (User) testMap.keySet().toArray()[0];
-        List<Meal> testList  = (List<Meal>) testMap.values().toArray()[0];
+        User testUser = service.getUserWithMeals(UserTestData.USER_ID);
+        List<Meal> testList  = testUser.getMeals();
+        Collections.sort(testList, (o1, o2) -> o2.getDateTime().compareTo(o1.getDateTime()));
         ru.javawebinar.topjava.UserTestData.MATCHER.assertEquals(testUser, UserTestData.USER);
         ru.javawebinar.topjava.MealTestData.MATCHER.assertCollectionEquals(testList, MealTestData.MEALS);
     }

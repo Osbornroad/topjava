@@ -31,5 +31,5 @@ public interface MealService {
 
     Meal save(Meal meal, int userId);
 
-    Map<Meal, User> getMealWithUser(int id);
+    Meal getMealWithUser(int id);
 }
